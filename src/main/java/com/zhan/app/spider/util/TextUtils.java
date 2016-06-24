@@ -21,4 +21,12 @@ public final class TextUtils {
 		return true;
 	}
 
+	public static boolean isEmpty(String arg) {
+		return (null == arg || arg.trim().length() < 1);
+	}
+
+	public static boolean isNotEmpty(String arg) {
+		return !isEmpty(arg);
+	}
+
 }

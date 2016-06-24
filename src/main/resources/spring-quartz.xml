@@ -15,7 +15,12 @@
 		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-				<ref bean="myJobTrigger" />
+				<ref bean="mySpiderJobTrigger" />
+				<ref bean="myPushJobTrigger_0" />
+				<ref bean="myPushJobTrigger_1" />
+				<ref bean="myPushJobTrigger_2" />
+				<ref bean="myPushJobTrigger_3" />
+				<ref bean="myPushJobTrigger_4" />
 			</list>
 		</property>
 	</bean>
@@ -24,28 +29,89 @@
 	<!-- 调度的配置开始 -->
 
 	<!-- quartz-2.x的配置 -->
-	<bean id="myJobTrigger"
+	<bean id="mySpiderJobTrigger"
 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail">
-			<ref bean="myJobDetail" />
+			<ref bean="mySpiderDetail" />
 		</property>
 		<property name="cronExpression">
 			<value>0 0/15 * * * ?</value>       <!-- 每隔6分钟执行一次 -->
 		</property>
 	</bean>
+	<!-- quartz-2.x的配置 -->
+	<!-- 推送任务 -->
+	<bean id="myPushJobTrigger_0"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="myPushJobDetail" />
+		</property>
+		<property name="cronExpression">
+			<value>0 45 7 ? * *</value>       <!-- 每天上午7:45触发 -->
+		</property>
+	</bean>
+	<!-- 推送任务 -->
+	<bean id="myPushJobTrigger_1"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="myPushJobDetail" />
+		</property>
+		<property name="cronExpression">
+			<value>0 45 11 ? * *</value>       <!-- 每天11:45触发 -->
+		</property>
+	</bean>
+	<!-- 推送任务 -->
+	<bean id="myPushJobTrigger_2"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="myPushJobDetail" />
+		</property>
+		<property name="cronExpression">
+			<value>0 45 15 ? * *</value>       <!-- 每天15:45触发 -->
+		</property>
+	</bean>
+	<!-- 推送任务 -->
+	<bean id="myPushJobTrigger_3"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="myPushJobDetail" />
+		</property>
+		<property name="cronExpression">
+			<value>0 0 18 ? * *</value>       <!-- 每天18点触发 -->
+		</property>
+	</bean>
+	<!-- 推送任务 -->
+	<bean id="myPushJobTrigger_4"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="myPushJobDetail" />
+		</property>
+		<property name="cronExpression">
+			<value>0 0 20 ? * *</value>       <!-- 每天18点触发 -->
+		</property>
+	</bean>
 	<!-- 调度的配置结束 -->
 
 	<!-- job的配置开始 -->
-	<bean id="myJobDetail"
+	<bean id="mySpiderDetail"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject">
 			<ref bean="myJob" />
 		</property>
 		<property name="targetMethod">
-			<value>work</value>
+			<value>spider</value>
+		</property>
+	</bean>
+	<!-- job的配置开始 -->
+	<bean id="myPushJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="myJob" />
+		</property>
+		<property name="targetMethod">
+			<value>push</value>
 		</property>
 	</bean>
 
 	<!-- 工作的bean -->
-	<bean id="myJob" class="com.zhan.app.spider.task.SpiderWork" />
+	<bean id="myJob" class="com.zhan.app.spider.task.QuertzWork" />
 </beans>
