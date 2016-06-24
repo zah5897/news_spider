@@ -68,6 +68,7 @@ public class Spider {
 		// 该方法在getPage()方法之后调用才能生效
 		webClient.waitForBackgroundJavaScript(1000 * 3);
 		webClient.setJavaScriptTimeout(0);
+		webClient.close();
 		return page;
 	}
 

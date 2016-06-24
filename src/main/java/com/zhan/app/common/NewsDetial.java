@@ -14,6 +14,7 @@ public class NewsDetial {
 	public String title;
 	public String from;
 	public String publish_time;
+	public String detial_url;
 	public List<Node> nodes;
 
 }

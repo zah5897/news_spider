@@ -5,9 +5,11 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import org.jsoup.nodes.Document;
 
+import com.alibaba.fastjson.JSON;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.html.HtmlListItem;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -18,7 +20,11 @@ import com.zhan.app.spider.util.TextUtils;
 
 public class SpiderManager {
 	private static SpiderManager spiderManager;
-	public static String url = "http://toutiao.com/news_hot/";
+	// 热点新闻、社会、娱乐
+	// public static String[] urls = new
+	// String[]{"http://toutiao.com/news_hot/","http://toutiao.com/news_society/","http://toutiao.com/news_entertainment/"};
+	public static String[] urls = new String[] { "http://toutiao.com/news_society/",
+			"http://toutiao.com/news_entertainment/" };
 
 	private SpiderManager(NewsService newsService) {
 		this.newsService = newsService;
@@ -35,6 +41,11 @@ public class SpiderManager {
 			spiderManager = new SpiderManager(newsService);
 		}
 		return spiderManager;
+	}
+
+	private String getRandomUrl() {
+		int index = new Random().nextInt(urls.length);
+		return urls[index];
 	}
 
 	public void start() {
@@ -56,7 +67,8 @@ public class SpiderManager {
 							System.out.println("---------详情解析完毕--------------" + news.url);
 						} catch (Exception e) {
 							e.printStackTrace();
-							errorToMail(e);
+
+							errorToMail(news, e);
 						}
 					}
 				}
@@ -70,6 +82,7 @@ public class SpiderManager {
 		List<News> newsList = new ArrayList<News>();
 		HtmlPage page;
 		try {
+			String url = getRandomUrl();
 			page = Spider.spider(url);
 			System.out.println("--------- end simpleSpider---------------");
 			List<?> lis = page.getByXPath("//li[@class='item clearfix']");
@@ -85,7 +98,7 @@ public class SpiderManager {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			errorToMail(e);
+			errorToMail(null, e);
 			System.out.println("--------- error simpleSpider---------------");
 		}
 		return newsList;
@@ -101,17 +114,21 @@ public class SpiderManager {
 		if (detialNews == null) {
 			return;
 		}
-		if (TextUtils.isEmpty(detialNews.from)) {
-			detialNews.from = news.from;
-		}
+		detialNews.title = news.title;
+		detialNews.from = news.from;
 		detialNews.publish_time = news.publish_time;
 		String id = newsService.insert(news);
 		detialNews.id = id;
+		detialNews.detial_url = detialUrl;
 		newsService.insert(detialNews);
 
 	}
 
-	private void errorToMail(Exception e) {
-		System.err.println("--------- error to mail report---------------");
+	private void errorToMail(News simpleNews, Exception e) {
+		if (simpleNews != null) {
+			System.err.println("--------- error to mail report---------------json=" + JSON.toJSONString(simpleNews));
+		} else {
+			System.err.println("--------- error to mail report---------------");
+		}
 	}
 }

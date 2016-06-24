@@ -37,4 +37,8 @@ public class NewsController {
 		return result;
 	}
 
+	@RequestMapping("push")
+	public ModelMap push() {
+		return ResultUtil.getResultOKMap();
+	}
 }

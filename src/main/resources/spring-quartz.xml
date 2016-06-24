@@ -30,7 +30,7 @@
 			<ref bean="myJobDetail" />
 		</property>
 		<property name="cronExpression">
-			<value>0 0/5 * * * ?</value>       <!-- 每隔6分钟执行一次 -->
+			<value>0 0/15 * * * ?</value>       <!-- 每隔6分钟执行一次 -->
 		</property>
 	</bean>
 	<!-- 调度的配置结束 -->
