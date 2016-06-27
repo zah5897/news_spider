@@ -35,7 +35,6 @@ public class NoopPushUtil {
 		// 底层的代码根据isProduction来选择是生产环境的地址和端口还是测试环境的地址和端口
 		iphoneApnsService = APNS.newService().withCert(iphoneCertPath, iphoneCertPassword)
 				.withAppleDestination(isProduction).build();
-
 	}
 
 	public boolean pushNews(News news) {
@@ -129,7 +128,6 @@ public class NoopPushUtil {
 		}
 		// 次数发送给单个设备，也可以同时发给多个设备
 		iphoneApnsService.push(deviceToken, payloadBuilder.build());
-
 	}
 
 	private void sendIphoneNotifications(String alert, int badge, String sound, Object message,

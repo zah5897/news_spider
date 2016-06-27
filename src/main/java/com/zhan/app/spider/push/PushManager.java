@@ -26,6 +26,5 @@ public class PushManager {
 	}
 
 	public void start() {
-        new Thread
 	}
 }

@@ -7,7 +7,7 @@ import com.zhan.app.spider.service.NewsService;
 import com.zhan.app.spider.service.UserService;
 import com.zhan.app.spider.spider.SpiderManager;
 
-public class QuertzWork {
+public class TimerWork {
 	@Resource
 	private NewsService newsService;
 	@Resource

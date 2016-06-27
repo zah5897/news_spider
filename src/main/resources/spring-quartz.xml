@@ -1,117 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="
         http://www.springframework.org/schema/beans     
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context.xsd
-    	">
-
-	<!-- 启动触发器的配置开始 -->
-	<bean name="startQuertz" lazy-init="false" autowire="no"
+        http://www.springframework.org/schema/context/spring-context.xsd">
+	<bean name="scheduler"
 		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-				<ref bean="mySpiderJobTrigger" />
-				<ref bean="myPushJobTrigger_0" />
-				<ref bean="myPushJobTrigger_1" />
-				<ref bean="myPushJobTrigger_2" />
-				<ref bean="myPushJobTrigger_3" />
-				<ref bean="myPushJobTrigger_4" />
+				<ref bean="spiderJobTrigger" />
 			</list>
 		</property>
 	</bean>
-	<!-- 启动触发器的配置结束 -->
+	<bean id="spiderJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="mySpiderDetail" />
+		<property name="cronExpression" value="0 0/15 * * * ?" /> <!-- 每隔15分钟执行一次 -->
+	</bean>
 
-	<!-- 调度的配置开始 -->
-
-	<!-- quartz-2.x的配置 -->
-	<bean id="mySpiderJobTrigger"
-		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail">
-			<ref bean="mySpiderDetail" />
-		</property>
-		<property name="cronExpression">
-			<value>0 0/15 * * * ?</value>       <!-- 每隔6分钟执行一次 -->
-		</property>
-	</bean>
-	<!-- quartz-2.x的配置 -->
-	<!-- 推送任务 -->
-	<bean id="myPushJobTrigger_0"
-		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail">
-			<ref bean="myPushJobDetail" />
-		</property>
-		<property name="cronExpression">
-			<value>0 45 7 ? * *</value>       <!-- 每天上午7:45触发 -->
-		</property>
-	</bean>
-	<!-- 推送任务 -->
-	<bean id="myPushJobTrigger_1"
-		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail">
-			<ref bean="myPushJobDetail" />
-		</property>
-		<property name="cronExpression">
-			<value>0 45 11 ? * *</value>       <!-- 每天11:45触发 -->
-		</property>
-	</bean>
-	<!-- 推送任务 -->
-	<bean id="myPushJobTrigger_2"
-		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail">
-			<ref bean="myPushJobDetail" />
-		</property>
-		<property name="cronExpression">
-			<value>0 45 15 ? * *</value>       <!-- 每天15:45触发 -->
-		</property>
-	</bean>
-	<!-- 推送任务 -->
-	<bean id="myPushJobTrigger_3"
-		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail">
-			<ref bean="myPushJobDetail" />
-		</property>
-		<property name="cronExpression">
-			<value>0 0 18 ? * *</value>       <!-- 每天18点触发 -->
-		</property>
-	</bean>
-	<!-- 推送任务 -->
-	<bean id="myPushJobTrigger_4"
-		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail">
-			<ref bean="myPushJobDetail" />
-		</property>
-		<property name="cronExpression">
-			<value>0 0 20 ? * *</value>       <!-- 每天18点触发 -->
-		</property>
-	</bean>
-	<!-- 调度的配置结束 -->
 
 	<!-- job的配置开始 -->
 	<bean id="mySpiderDetail"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject">
-			<ref bean="myJob" />
-		</property>
-		<property name="targetMethod">
-			<value>spider</value>
-		</property>
-	</bean>
-	<!-- job的配置开始 -->
-	<bean id="myPushJobDetail"
-		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject">
-			<ref bean="myJob" />
-		</property>
-		<property name="targetMethod">
-			<value>push</value>
-		</property>
+		<property name="targetObject" ref="job" />
+		<property name="targetMethod" value="spider" />
 	</bean>
 
 	<!-- 工作的bean -->
-	<bean id="myJob" class="com.zhan.app.spider.task.QuertzWork" />
+	<bean id="job" class="com.zhan.app.spider.task.TimerWork" />
+
 </beans>
