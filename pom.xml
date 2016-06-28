@@ -52,8 +52,18 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-
-		<!-- http://mvnrepository.com/artifact/org.springframework.data/spring-data-mongodb -->
+		<!-- redis -->
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-redis</artifactId>
+			<version>1.4.1.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>2.6.0</version>
+		</dependency>
+		<!-- spring-data-mongodb -->
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-mongodb</artifactId>
@@ -116,7 +126,7 @@
 			<version>2.3.2</version>
 		</dependency>
 
-		<!--  org.codehaus.jackson -->
+		<!-- org.codehaus.jackson -->
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
