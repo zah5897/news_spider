@@ -22,4 +22,8 @@ public class UserService {
 		return userDao.getPushUser(last_id, count);
 	}
 
+	public List<User> getUser() {
+		return userDao.getUsers();
+	}
+
 }

@@ -12,21 +12,33 @@
 		<property name="triggers">
 			<list>
 				<ref bean="spiderJobTrigger" />
+				<ref bean="pushJobTrigger" />
 			</list>
 		</property>
 	</bean>
 	<bean id="spiderJobTrigger"
 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="mySpiderDetail" />
-		<property name="cronExpression" value="0 0/15 * * * ?" /> <!-- 每隔15分钟执行一次 -->
+		<property name="cronExpression" value="0 0/5 * * * ?" /> <!-- 每隔15分钟执行一次 -->
+	</bean>
+	<bean id="pushJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="myPushDetail" />
+		<property name="cronExpression" value="0 0/5 * * * ?" /> <!-- 每隔60分钟执行一次 -->
 	</bean>
 
 
-	<!-- job的配置开始 -->
+	<!-- spider job的配置开始 -->
 	<bean id="mySpiderDetail"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="job" />
 		<property name="targetMethod" value="spider" />
+	</bean>
+	<!-- push job的配置开始 -->
+	<bean id="myPushDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="job" />
+		<property name="targetMethod" value="push" />
 	</bean>
 
 	<!-- 工作的bean -->

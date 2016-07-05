@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.jsoup.nodes.Document;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import com.alibaba.fastjson.JSON;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
@@ -16,7 +17,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.zhan.app.common.News;
 import com.zhan.app.common.NewsDetial;
 import com.zhan.app.spider.service.NewsService;
-import com.zhan.app.spider.util.TextUtils;
+import com.zhan.app.spider.util.RedisKeys;
 
 public class SpiderManager {
 	private static SpiderManager spiderManager;
@@ -26,19 +27,20 @@ public class SpiderManager {
 	public static String[] urls = new String[] { "http://toutiao.com/news_society/",
 			"http://toutiao.com/news_entertainment/" };
 
-	private SpiderManager(NewsService newsService) {
+	private SpiderManager(NewsService newsService, RedisTemplate<String, String> redisTemplate) {
 		this.newsService = newsService;
+		this.redisTemplate = redisTemplate;
 	}
 
 	private boolean doing = false;
 
 	private List<News> news;
-
+	private RedisTemplate<String, String> redisTemplate;
 	private NewsService newsService;
 
-	public static SpiderManager getInstance(NewsService newsService) {
+	public static SpiderManager getInstance(NewsService newsService, RedisTemplate<String, String> redisTemplate) {
 		if (spiderManager == null) {
-			spiderManager = new SpiderManager(newsService);
+			spiderManager = new SpiderManager(newsService, redisTemplate);
 		}
 		return spiderManager;
 	}
@@ -121,6 +123,9 @@ public class SpiderManager {
 		detialNews.id = id;
 		detialNews.detial_url = detialUrl;
 		newsService.insert(detialNews);
+		String newsStr = JSON.toJSONString(news);
+		System.out.println(newsStr);
+		redisTemplate.opsForValue().set(RedisKeys.KEY_NEW_NEWS, newsStr); // 新的变旧的
 
 	}
 

@@ -44,4 +44,8 @@ public class UserDao extends BaseDao {
 		return mongoTemplate.find(query, User.class);
 	}
 
+	public List<User> getUsers() {
+		return mongoTemplate.findAll(User.class);
+	}
+
 }

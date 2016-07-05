@@ -1,4 +1,8 @@
 <web-app>
+	<context-param>
+		<param-name>webAppRootKey</param-name>
+		<param-value>news_spider</param-value>
+	</context-param>
 	<display-name>Archetype Created Web Application</display-name>
 	<filter>
 		<filter-name>encodingFilter</filter-name>
