@@ -1,1 +1,1 @@
-https://github.com/zah5897/slove.git
+https://github.com/zah5897/news_spider.git
